@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   OperationFactory.h
  * Author: eric
  *
@@ -14,13 +14,18 @@
 #ifndef OPERATIONFACTORY_H
 #define OPERATIONFACTORY_H
 
-class OperationFactory {
-public:
-    OperationFactory();
-    OperationFactory(const OperationFactory& orig);
-    virtual ~OperationFactory();
-private:
+#include "Factory.h"
 
+class Operation;
+class OperationStatusFactory;
+
+class OperationFactory : public Factory<Operation>
+{
+protected:
+    OperationFactory(OperationStatusFactory* operationStatusFactory);
+
+protected:
+    OperationStatusFactory* operationStatusFactory;
 };
 
 #endif /* OPERATIONFACTORY_H */

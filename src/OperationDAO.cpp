@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   OperationDAO.cpp
  * Author: eric
- * 
+ *
  * Created on 29 mars 2016, 17:03
  */
 #include <typeinfo>
@@ -16,16 +16,21 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "Logger.h"
 #include "Operation.h"
+#include "OperationHandler.h"
 #include "Decimal.h"
 #include "OperationStatus.h"
 #include "Utils.h"
 #include "CustomFields.h"
 #include "constants.h"
+#include "OperationFactory.h"
+#include "OperationStatusFactory.h"
 #include "OperationDAO.h"
 
 #define CHECK(a) assert(a == CASS_OK)
 
-OperationDAO::OperationDAO()
+OperationDAO::OperationDAO(OperationFactory* factory_, OperationStatusFactory* statusFactory_)
+: factory(factory_)
+, statusFactory(statusFactory_)
 {
     insertOperationStatement = cass_statement_new("INSERT INTO fpe.operations (month, iban, id, status, custom_fields,\
                                                                                canal, sub_canal, type, acquirer_id, insertion_date,\
@@ -56,20 +61,10 @@ OperationDAO::OperationDAO()
                                                     WHERE month=? AND iban=? AND mastercard_stan='' AND id=?", 11);
     provisionedOperationStatement = cass_statement_new("UPDATE fpe.operations SET status=?, provision_due_date=?, provisioned_amount=?\
                                                         WHERE month=? AND iban=? AND mastercard_stan='' AND id=?", 6);
-    
+
     accountedOperationStatement = cass_statement_new("UPDATE fpe.operations SET status=?, accounting_date=?, accounted_amount=?\
                                                      WHERE month=? AND iban=? AND mastercard_stan='' AND id=?", 6);
-    
-    operationStatuses.push_back(new ReservedStatus);
-    operationStatuses.push_back(new OnHoldStatus);
-    operationStatuses.push_back(new ProvisionedStatus);
-    operationStatuses.push_back(new AccountedStatus);
-    operationStatuses.push_back(new CancelledStatus);
-    operationStatuses.push_back(new RejectedStatus);
-}
 
-OperationDAO::OperationDAO(const OperationDAO& orig)
-{
 }
 
 OperationDAO::~OperationDAO()
@@ -87,7 +82,7 @@ void OperationDAO::getOperation(const std::string& month,
                                 const std::string& iban,
                                 std::vector<Operation*>& operations)
 {
-    
+
 }
 
 void OperationDAO::getOperation(const std::string& month,
@@ -95,7 +90,7 @@ void OperationDAO::getOperation(const std::string& month,
                                 const std::string& transactionId,
                                 std::vector<Operation*>& operations)
 {
-    
+
 }
 
 void OperationDAO::getRejectedOperations(std::vector<Operation*>& operations)
@@ -110,13 +105,13 @@ void OperationDAO::getRejectedOperations(std::vector<Operation*>& operations)
         while (cass_iterator_next(rows))
         {
             const CassRow* row = cass_iterator_get_row(rows);
-            Operation* operation = get();
+            Operation* operation = factory->get();
 
             const CassValue* ibanValue = cass_row_get_column(row, 0);
             const CassValue* idValue = cass_row_get_column(row, 1);
             const CassValue* statusValue = cass_row_get_column(row, 2);
             const CassValue* customFieldsValue = cass_row_get_column(row, 3);
-            
+
             CassIterator* mapIterator = cass_iterator_from_map(customFieldsValue);
             while (cass_iterator_next(mapIterator))
             {
@@ -130,7 +125,7 @@ void OperationDAO::getRejectedOperations(std::vector<Operation*>& operations)
                     break;
                 }
             }
-            
+
             const CassValue* canalValue = cass_row_get_column(row, 4);
             const CassValue* subCanalValue = cass_row_get_column(row, 5);
             const CassValue* typeValue = cass_row_get_column(row, 6);
@@ -140,15 +135,15 @@ void OperationDAO::getRejectedOperations(std::vector<Operation*>& operations)
             const CassValue* requiredAmountValue = cass_row_get_column(row, 11);
             const CassValue* transactionIdValue = cass_row_get_column(row, 12);
             const CassValue* messageIdValue = cass_row_get_column(row, 14);
-            
+
             cass_value_get(typeValue, operation->type);
             std::string value;
             cass_value_get_string(statusValue, value);
             cassandra_exemple::OperationStatus status = cassandra_exemple::getOperationStatus(value);
-            OperationStatus* operationStatus = getOperationStatus(status);
-            operationStatus->initialize(this, row);
+            OperationStatus* operationStatus = statusFactory->getOperationStatus(status);
+            operationStatus->initialize(statusFactory, row);
             operation->setStatus(operationStatus);
-            
+
             cass_value_get(ibanValue, operation->getClientCompte().iban);
             cass_value_get(idValue, operation->id);
             cass_value_get(canalValue, operation->canal);
@@ -159,7 +154,7 @@ void OperationDAO::getRejectedOperations(std::vector<Operation*>& operations)
             ::cass_value_get(requiredAmountValue, operation->amount);
             cass_value_get(transactionIdValue, operation->transactionId);
             cass_value_get(messageIdValue, operation->messageId);
-            
+
             operations.push_back(operation);
         }
         cass_iterator_free(rows);
@@ -183,16 +178,16 @@ void OperationDAO::getOperation(cassandra_exemple::OperationType type,
         while (cass_iterator_next(rows))
         {
             const CassRow* row = cass_iterator_get_row(rows);
-            Operation* operation = get();
+            Operation* operation = factory->get();
             operation->setType(type);
-            OperationStatus* operationStatus = getOperationStatus(status);
-            operationStatus->initialize(this, row);
+            OperationStatus* operationStatus = statusFactory->getOperationStatus(status);
+            operationStatus->initialize(statusFactory, row);
             operation->setStatus(operationStatus);
-            
+
             const CassValue* ibanValue = cass_row_get_column(row, 0);
             const CassValue* idValue = cass_row_get_column(row, 1);
             const CassValue* customFieldsValue = cass_row_get_column(row, 2);
-            
+
             if (CassIterator* mapIterator = cass_iterator_from_map(customFieldsValue))
             {
                 while (cass_iterator_next(mapIterator))
@@ -229,8 +224,31 @@ void OperationDAO::getOperation(cassandra_exemple::OperationType type,
             ::cass_value_get(requiredAmountValue, operation->amount);
             cass_value_get(transactionIdValue, operation->transactionId);
             cass_value_get(messageIdValue, operation->messageId);
-            
+
             operations.push_back(operation);
+        }
+        cass_iterator_free(rows);
+        cass_result_free(result);
+    }
+    cass_future_free(result_future);
+}
+
+void OperationDAO::getOperation(cassandra_exemple::OperationType type,
+                                cassandra_exemple::OperationStatus status,
+                                OperationHandler* operationHandler)
+{
+    CassFuture* result_future = session_execute<cassandra_exemple::OperationType, cassandra_exemple::OperationStatus>
+                                                (selectOperationTypeStatusStatement,
+                                                type,
+                                                status);
+    if (cass_future_error_code(result_future) == CASS_OK)
+    {
+        const CassResult* result = cass_future_get_result(result_future);
+        CassIterator* rows = cass_iterator_from_result(result);
+        while (cass_iterator_next(rows))
+        {
+            const CassRow* row = cass_iterator_get_row(rows);
+            operationHandler->onResultAvailable(row, type, status);
         }
         cass_iterator_free(rows);
         cass_result_free(result);
@@ -246,13 +264,13 @@ void OperationDAO::insertOperation(Operation* operation)
     CassCollection* customFields = cass_collection_new(CASS_COLLECTION_TYPE_MAP, 6);
     cass_collection_append(customFields, CustomFields::OPERATION_DIRECTION);
     cass_collection_append(customFields, operation->getDirection());
-    
+
     if (operation->getFee().getValue())
     {
         cass_collection_append(customFields, CustomFields::FPE_FEE);
         cass_collection_append(customFields, operation->getFee().getBytes());
     }
-    
+
     if (Rejet* rejet = operation->getRejet())
     {
         cass_collection_append(customFields, CustomFields::REJECTION_CODE);
@@ -262,7 +280,7 @@ void OperationDAO::insertOperation(Operation* operation)
     }
     const std::string& uuId = Utils::getUUId();
     operation->setId(uuId);
-    
+
     CHECK(cass_statement_bind(insertOperationStatement, 0, Utils::getMonth(operation->getInsertionDate())));
     CHECK(cass_statement_bind(insertOperationStatement, 1, clientCompte.iban));
     CHECK(cass_statement_bind(insertOperationStatement, 2, uuId));
@@ -335,7 +353,7 @@ bool OperationDAO::isOperationInserted(Operation* operation)
                         const CassValue* typeValue = cass_row_get_column_by_name(row, "type");
                         const CassValue* statusValue = cass_row_get_column_by_name(row, "status");
                         const CassValue* insertionDateValue = cass_row_get_column_by_name(row, "insertion_date");
-                        
+
                         std::string value;
                         cass_value_get_string(typeValue, value);
                         cassandra_exemple::OperationType operationType = cassandra_exemple::getOperationType(value);
@@ -349,21 +367,17 @@ bool OperationDAO::isOperationInserted(Operation* operation)
 
                         cass_value_get_string(statusValue, value);
                         cassandra_exemple::OperationStatus status = cassandra_exemple::getOperationStatus(value);
-                        OperationStatus* operationStatus = getOperationStatus(status);
-                        operationStatus->initialize(this, row);
+                        OperationStatus* operationStatus = statusFactory->getOperationStatus(status);
+                        operationStatus->initialize(statusFactory, row);
                         operation->setStatus(operationStatus);
                         cass_value_get_string(idValue, operation->id);
                         cass_int64_t timestamp;
                         cass_value_get_int64(insertionDateValue, &timestamp);
                         operation->setInsertionDate(boost::posix_time::from_time_t(timestamp));
-                        BOOST_LOG_TRIVIAL(info) << "Operation " << operation->getTransactionId()
-                                                    << " type " << value
-                                                    << " from client " << operation->getClientCompte().iban
-                                                    << " insertion date " << operation->getInsertionDate();
                         break;
                     }
                 }
-     
+
             }
             cass_iterator_free(rows);
         }
@@ -381,7 +395,7 @@ void OperationDAO::updateOperationStatus(ReservedStatus* status)
 {
 
 }
-    
+
 void OperationDAO::updateOperationStatus(RejectedStatus* status)
 {
     Operation* operation = status->getOperation();
@@ -400,12 +414,12 @@ void OperationDAO::updateOperationStatus(RejectedStatus* status)
                     Utils::getMonth(operation->getInsertionDate()),
                     operation->getClientCompte().iban,
                     operation->getId());
-    
+
 }
 
 void OperationDAO::updateOperationStatus(OnHoldStatus* status)
 {
-    
+
 }
 
 void OperationDAO::updateOperationStatus(ProvisionedStatus* status)
@@ -415,7 +429,7 @@ void OperationDAO::updateOperationStatus(ProvisionedStatus* status)
                             << " month " << Utils::getMonth(operation->getInsertionDate())
                             << " iban " << operation->getClientCompte().iban
                             << " transaction id " << operation->getTransactionId();
-                            
+
     session_execute<cassandra_exemple::OperationStatus, boost::posix_time::ptime, Decimal, std::string, std::string, std::string>
                                                 (provisionedOperationStatement,
                                                 status->getStatus(),
@@ -442,52 +456,8 @@ void OperationDAO::updateOperationStatus(AccountedStatus* status)
 
 void OperationDAO::updateOperationStatus(CancelledStatus* status)
 {
-    
-}
 
-template <>
-void OperationDAO::initializeOperationStatus<RejectedStatus>(RejectedStatus* rejectedStatus, const CassRow* row)
-{
-    const CassValue* customFieldsValue = cass_row_get_column_by_name(row, "custom_fields");
-    const CassValue* rejectionCauseValue = cass_row_get_column_by_name(row, "rejection_cause");
-    const CassValue* fpeRejectedValue = cass_row_get_column_by_name(row, "sepa_fpe_rejected");
-    const CassValue* sabRejectedValue = cass_row_get_column_by_name(row, "sepa_sab_rejected");
-    const CassValue* sabRejectValue = cass_row_get_column_by_name(row, "sepa_sab_reject");
-
-    
-    if (CassIterator* iterator = cass_iterator_from_map(customFieldsValue))
-    {
-        while (cass_iterator_next(iterator))
-        {
-            std::string value;
-            const CassValue* key = cass_iterator_get_map_key(iterator);
-            cass_value_get_string(key, value);
-            if (value == CustomFields::REJECTION_CODE)
-            {
-                const CassValue* rejectionCodeValue = cass_iterator_get_map_value(iterator);
-                cass_value_get_string(rejectionCodeValue, value);
-                rejectedStatus->setCode(cassandra_exemple::getRejectionCode(value));
-                break;
-            }
-        }
-        cass_iterator_free(iterator);
-    }
-    cass_value_get_string(rejectionCauseValue, rejectedStatus->cause);
-    cass_value_get_bool(fpeRejectedValue, rejectedStatus->fpeRejected);
-    cass_value_get_bool(sabRejectedValue, rejectedStatus->sabRejected);
-    cass_value_get_bool(sabRejectValue, rejectedStatus->notifySab);
-}
-
-template <typename T>
-void OperationDAO::initializeOperationStatus(T* status, const CassRow* row)
-{
-}
-
-OperationStatus* OperationDAO::getOperationStatus(cassandra_exemple::OperationStatus operationStatus) const
-{
-    return operationStatuses[operationStatus];
 }
 
 
-    
-    
+

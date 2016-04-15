@@ -75,11 +75,11 @@ LDLIBSOPTIONS=-L../../AndroidStudioProjects/cpp-driver-master/packaging/build/ca
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple ${OBJECTFILES} ${LDLIBSOPTIONS} -DBOOST_LOG_DYN_LINK
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient ${OBJECTFILES} ${LDLIBSOPTIONS} -DBOOST_LOG_DYN_LINK
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -187,7 +187,7 @@ ${OBJECTDIR}/src/constants.o: src/constants.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient
 
 # Subprojects
 .clean-subprojects:

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   Client.h
  * Author: eric
  *
@@ -20,7 +20,7 @@
 class Client {
 public:
     Client();
-    
+
     ~Client();
 
     void setBalanceLimit(const Decimal& balance_limit);
@@ -39,9 +39,12 @@ public:
     void authorizedCorrespondentIban(const std::string& iban);
     void updateBalanceErp(const Decimal& decimal);
     void updateBalance(const Decimal& decimal);
-
+    void setIban(const std::string& iban)
+    {
+        this->iban = iban;
+    }
     void display() const;
-    
+
     friend class ClientDAO;
 private:
     Client(const Client& orig);

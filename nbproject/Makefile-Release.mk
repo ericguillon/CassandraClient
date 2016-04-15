@@ -75,25 +75,25 @@ LDLIBSOPTIONS=-L../../AndroidStudioProjects/cpp-driver-master/packaging/build/ca
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ../boost_1_60_0/stage/lib/libboost_log.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ../boost_1_60_0/stage/lib/libboost_log.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ../boost_1_60_0/stage/lib/libboost_log_setup.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ../boost_1_60_0/stage/lib/libboost_log_setup.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ../boost_1_60_0/stage/lib/libboost_signals.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ../boost_1_60_0/stage/lib/libboost_signals.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ../boost_1_60_0/stage/lib/libboost_system.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ../boost_1_60_0/stage/lib/libboost_system.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ../boost_1_60_0/stage/lib/libboost_filesystem.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ../boost_1_60_0/stage/lib/libboost_filesystem.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ../boost_1_60_0/stage/lib/libboost_date_time.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ../boost_1_60_0/stage/lib/libboost_date_time.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ../boost_1_60_0/stage/lib/libboost_thread.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ../boost_1_60_0/stage/lib/libboost_thread.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -201,7 +201,7 @@ ${OBJECTDIR}/src/constants.o: src/constants.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraexemple
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/cassandraclient
 
 # Subprojects
 .clean-subprojects:

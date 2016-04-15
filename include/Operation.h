@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   Operation.h
  * Author: eric
  *
@@ -39,7 +39,7 @@ public:
     Operation();
     Operation(const Operation& orig);
     ~Operation();
-    
+
     Rejet* buildRejet(cassandra_exemple::RejectionCode rejectionCode, const std::string& cause, bool sabReject = false);
     const Decimal& getAmount() const
     {
@@ -65,7 +65,7 @@ public:
     {
         return comptes[cassandra_exemple::CompteType::client];
     }
-    
+
     Compte& getCorrespondentCompte()
     {
         return comptes[cassandra_exemple::CompteType::correspondent];
@@ -75,7 +75,7 @@ public:
     {
         return comptes[cassandra_exemple::CompteType::correspondent];
     }
-    
+
     cassandra_exemple::OperationDirection getDirection() const
     {
         return direction;
@@ -142,7 +142,7 @@ public:
     {
         return type;
     }
-    
+
     void setAmount(const Decimal& amount)
     {
         this->amount = amount;
@@ -222,20 +222,20 @@ public:
     {
         this->type = type;
     }
-    
+
     Rejet* getRejet() const
     {
         return rejet;
     }
-    
+
     OperationStatus* getStatus() const
     {
         return status;
     }
-    
+
     void setStatus(OperationStatus* status);
     friend class OperationDAO;
-
+    friend class CassandraOperationFactory;
 private:
     Decimal amount;
     Decimal localAmount;
@@ -248,7 +248,7 @@ private:
     std::string realMessageId;
     std::string realTransactionId;
     mutable std::string technicalLabel;
-    
+
     cassandra_exemple::OperationCanal canal;
     cassandra_exemple::OperationSubCanal subCanal;
     cassandra_exemple::OperationType type;

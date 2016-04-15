@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   Decimal.cpp
  * Author: eric
- * 
+ *
  * Created on 22 mars 2016, 13:45
  */
 #include <cstdio>
@@ -66,7 +66,7 @@ Decimal::Decimal(double value)
 void Decimal::encode()
 {
     int intValue = (value * 1000) / 10;
-    bytesSize = snprintf((char*)bytes, maxBytesSize - 1, "%d", intValue); 
+    bytesSize = snprintf((char*)bytes, maxBytesSize - 1, "%d", intValue);
 }
 
 Decimal::Decimal(const Decimal& orig) {
@@ -93,12 +93,14 @@ Decimal& Decimal::operator += (const Decimal& other)
 {
     value += other.value;
     encode();
+    return *this;
 }
 
 Decimal& Decimal::operator -= (const Decimal& other)
 {
     value -= other.value;
     encode();
+    return *this;
 }
 
 bool Decimal::operator < (const Decimal& other)

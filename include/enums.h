@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   enums.h
  * Author: eric
  *
@@ -13,6 +13,7 @@
 
 #ifndef ENUMS_H
 #define ENUMS_H
+#include <string>
 
 namespace cassandra_exemple
 {
@@ -20,15 +21,15 @@ namespace cassandra_exemple
     {
         client = 0,
         correspondent,
-        end  
+        end
     };
-    
+
     enum OperationDirection
     {
         debit = -1,
         credit = 1
     };
-    
+
     static const char* toString(OperationDirection direction)
     {
         const char* directionString;
@@ -43,15 +44,16 @@ namespace cassandra_exemple
         }
         return directionString;
     }
-    
+
     static OperationDirection getOperationDirection(const std::string& directionString)
     {
         if (directionString == "DEBIT")
             return debit;
         if (directionString == "CREDIT")
             return credit;
+        return debit;
     }
-    
+
     enum OperationStatus
     {
         undefined = -1,
@@ -62,7 +64,7 @@ namespace cassandra_exemple
         cancelled,
         rejected
     };
-    
+
     static const char* toString(OperationStatus status)
     {
         const char* statusString;
@@ -91,7 +93,7 @@ namespace cassandra_exemple
         }
         return statusString;
     }
-    
+
     static OperationStatus getOperationStatus(const std::string& statusString)
     {
         if (statusString == "RESERVEE")
@@ -110,7 +112,7 @@ namespace cassandra_exemple
             return undefined;
         return undefined;
     }
-    
+
     enum AccountStatus
     {
         opened = 0,
@@ -119,7 +121,7 @@ namespace cassandra_exemple
         creditBlocked,
         debitBlocked
     };
-    
+
     static const char* toString(AccountStatus accountStatus)
     {
         const char* statusString;
@@ -143,7 +145,7 @@ namespace cassandra_exemple
         }
         return statusString;
     }
-    
+
     static AccountStatus getAccountStatus(const std::string& statusString)
     {
         if (statusString == "compte_ouvert")
@@ -158,14 +160,14 @@ namespace cassandra_exemple
             return debitBlocked;
         return opened;
     }
-    
+
     enum OperationCanal
     {
         mastercard = 0,
         sepa,
         on_us
     };
-    
+
     static const char* toString(OperationCanal canal)
     {
         const char* canalString;
@@ -183,7 +185,7 @@ namespace cassandra_exemple
         }
         return canalString;
     }
-    
+
     static OperationCanal getOperationCanal(const std::string& canalString)
     {
         if (canalString == "MASTERCARD")
@@ -194,7 +196,7 @@ namespace cassandra_exemple
             return on_us;
         return sepa;
     }
-    
+
     enum OperationSubCanal
     {
         mastercard_proxi_payment = 0,
@@ -209,7 +211,7 @@ namespace cassandra_exemple
         on_us_fees,
         on_us_various_operations
     };
-    
+
     static const char* toString(OperationSubCanal subCanal)
     {
         const char* subCanalString;
@@ -251,7 +253,7 @@ namespace cassandra_exemple
         }
         return subCanalString;
     }
-    
+
     static OperationSubCanal getOperationSubCanal(const std::string& subCanalString)
     {
         if (subCanalString == "PROXI_PAYMENT")
@@ -276,8 +278,9 @@ namespace cassandra_exemple
             return on_us_fees;
         if (subCanalString == "VARIOUS_OPERATIONS")
             return on_us_various_operations;
+        return sepa_received_transfer;
     }
-    
+
     enum OperationType
     {
         card_payment = 0,
@@ -325,7 +328,7 @@ namespace cassandra_exemple
         on_us_fees_other,
         on_us_various_refund
     };
-    
+
     static const char* toString(OperationType type)
     {
         const char* typeString;
@@ -466,13 +469,13 @@ namespace cassandra_exemple
         }
         return typeString;
     }
-    
+
     static OperationType getOperationType(const std::string& operationString)
     {
         if (operationString == "CARD_PAYMENT")
             return card_payment;
         if  (operationString == "CARD_PAYMENT_REFUND")
-            return card_payment_refund;    
+            return card_payment_refund;
         if (operationString == "CARD_PAYMENT_CANCELLATION")
             return card_payment_cancellation;
         if (operationString == "UNPAID_CARD_PAYMENT")
@@ -570,7 +573,7 @@ namespace cassandra_exemple
         sab_received_transfer_rejection,
         sab_sdd_direct_debit_rejection
     };
-    
+
     static const char* toString(RejectionCode rejectionCode)
     {
         const char* rejectionString;
@@ -603,7 +606,7 @@ namespace cassandra_exemple
         }
         return rejectionString;
     }
-    
+
     static RejectionCode getRejectionCode(const std::string& rejectionString)
     {
         if (rejectionString == "05")
@@ -622,8 +625,9 @@ namespace cassandra_exemple
             return sab_received_transfer_rejection;
         if (rejectionString == "00")
             return sab_sdd_direct_debit_rejection;
+        return client_status;
     }
-    
+
     enum EventType
     {
         sepa_integration = 0,
@@ -639,7 +643,7 @@ namespace cassandra_exemple
         sab_cancellation,
         sab_rejection,
     };
-    
+
     static const char* toString(EventType eventType)
     {
         const char* eventTypeStr;

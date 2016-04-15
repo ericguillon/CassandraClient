@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   SCTHandler.h
  * Author: eric
  *
@@ -14,8 +14,11 @@
 #ifndef SCTHANDLER_H
 #define SCTHANDLER_H
 #include <rapidxml.hpp>
+#include <boost/shared_ptr.hpp>
 #include "SepaHandler.h"
+#include "ClientDAO.h"
 
+class CommandFactory;
 class SCTHandler: public SepaHandler
 {
 public:
@@ -35,11 +38,12 @@ public:
 
     using SepaHandler::processRejectedOperations;
     using SepaHandler::processProvisionedOperations;
-private:
-    Operation* buildOperation(XmlNode* receivedTransferNode);
-    void processOperation(Operation* operation);
-private:
-    
+protected:
+
+    void createClient(const std::string& iban);
+protected:
+    boost::shared_ptr<CommandFactory> factory;
+    ClientDAO clientDAO;
 };
 
 #endif /* SCTHANDLER_H */

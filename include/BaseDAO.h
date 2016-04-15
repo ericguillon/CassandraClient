@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   BaseDAO.h
  * Author: eric
  *
@@ -25,8 +25,8 @@ class BaseDAO
 {
 public:
     BaseDAO();
-    ~BaseDAO();
-    
+    virtual ~BaseDAO(){}
+
 protected:
     CassError cass_statement_bind(CassStatement* statement, std::size_t index, const char* value);
     CassError cass_statement_bind(CassStatement* statement, std::size_t index, const std::string& value);
@@ -41,31 +41,6 @@ protected:
         return cass_statement_bind(statement, index, cassandra_exemple::toString(value));
     }
 
-    CassError cass_collection_append(CassCollection* collection, const char* value);
-    CassError cass_collection_append(CassCollection* collection, const unsigned char* value);
-    CassError cass_collection_append(CassCollection* collection, const std::string& value);
-    template <typename T>
-    CassError cass_collection_append(CassCollection* collection, T value)
-    {
-        return cass_collection_append(collection, cassandra_exemple::toString(value));
-    }
-    
-    CassError cass_value_get_string(const CassValue* value, std::string& destination);
-    CassError cass_value_get_bool(const CassValue* value, bool& destination);
-    CassError cass_value_get(const CassValue* value, bool& destination)
-    {
-        return cass_value_get_bool(value, destination);
-    }
-    CassError cass_value_get(const CassValue* value, std::string& destination)
-    {
-        return cass_value_get_string(value, destination);
-    }
-    CassError cass_value_get(const CassValue* value, boost::posix_time::ptime& date);
-    CassError cass_value_get(const CassValue* value, cassandra_exemple::OperationCanal& canal);
-    CassError cass_value_get(const CassValue* value, cassandra_exemple::OperationSubCanal& subCanal);
-    CassError cass_value_get(const CassValue* value, cassandra_exemple::OperationDirection& direction);
-    CassError cass_value_get(const CassValue* value, cassandra_exemple::OperationType& type);
-    
     template <typename T1>
     CassFuture* session_execute(CassStatement* statement,
                                 typename CallTraits<T1>::Type param)
@@ -73,7 +48,7 @@ protected:
         cass_statement_bind(statement, 0, param);
         return cass_session_execute(session, statement);
     }
-    
+
     template <typename T1, typename T2>
     CassFuture* session_execute(CassStatement* statement,
                                 typename CallTraits<T1>::Type param1,
@@ -83,7 +58,7 @@ protected:
         cass_statement_bind(statement, 1, param2);
         return cass_session_execute(session, statement);
     }
-    
+
     template <typename T1, typename T2, typename T3>
     CassFuture* session_execute(CassStatement* statement,
                                 typename CallTraits<T1>::Type param1,
@@ -95,7 +70,7 @@ protected:
         cass_statement_bind(statement, 2, param3);
         return cass_session_execute(session, statement);
     }
-    
+
     template <typename T1, typename T2, typename T3, typename T4>
     CassFuture* session_execute(CassStatement* statement,
                                 typename CallTraits<T1>::Type param1,
@@ -109,7 +84,7 @@ protected:
         cass_statement_bind(statement, 3, param4);
         return cass_session_execute(session, statement);
     }
-    
+
     template <typename T1, typename T2, typename T3, typename T4, typename T5>
     CassFuture* session_execute(CassStatement* statement,
                                 typename CallTraits<T1>::Type param1,

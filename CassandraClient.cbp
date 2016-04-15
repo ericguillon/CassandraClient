@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="CassandraClient" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/CassandraClient" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-march=corei7" />
+					<Add option="-std=c++11" />
+					<Add option="-pg" />
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/CassandraClient" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-march=corei7" />
+					<Add option="-O3" />
+					<Add option="-std=c++11" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="/home/eric/code/cassandra/include" />
+			<Add directory="/home/eric/code/rapidxml-1.13" />
+			<Add directory="/home/eric/code/boost_1_60_0" />
+			<Add directory="include" />
+		</Compiler>
+		<Linker>
+			<Add option="-lcassandra" />
+			<Add option="-lpthread" />
+			<Add library="/home/eric/code/boost_1_60_0/stage/lib/libboost_log.a" />
+			<Add library="/home/eric/code/boost_1_60_0/stage/lib/libboost_log_setup.a" />
+			<Add library="/home/eric/code/boost_1_60_0/stage/lib/libboost_signals.a" />
+			<Add library="/home/eric/code/boost_1_60_0/stage/lib/libboost_thread.a" />
+			<Add library="/home/eric/code/boost_1_60_0/stage/lib/libboost_date_time.a" />
+			<Add library="/home/eric/code/boost_1_60_0/stage/lib/libboost_filesystem.a" />
+			<Add library="/home/eric/code/boost_1_60_0/stage/lib/libboost_system.a" />
+			<Add directory="/home/eric/code/cassandra/lib/x86_64-linux-gnu" />
+		</Linker>
+		<Unit filename="include/BaseCommand.h" />
+		<Unit filename="include/BaseDAO.h" />
+		<Unit filename="include/BaseOperationHandler.h" />
+		<Unit filename="include/CassandraOperationFactory.h" />
+		<Unit filename="include/CassandraSession.h" />
+		<Unit filename="include/CassandraUtils.h" />
+		<Unit filename="include/Client.h" />
+		<Unit filename="include/ClientDAO.h" />
+		<Unit filename="include/Command.h" />
+		<Unit filename="include/CommandFactory.h" />
+		<Unit filename="include/CommandImpl.h" />
+		<Unit filename="include/CustomFields.h" />
+		<Unit filename="include/Decimal.h" />
+		<Unit filename="include/Event.h" />
+		<Unit filename="include/EventDAO.h" />
+		<Unit filename="include/Factory.h" />
+		<Unit filename="include/GlobalConfig.h" />
+		<Unit filename="include/Int2Type.h" />
+		<Unit filename="include/LockFreeQueue.hpp" />
+		<Unit filename="include/Logger.h" />
+		<Unit filename="include/MultiThreadedCommandFactory.h" />
+		<Unit filename="include/OnHoldOperationHandler.h" />
+		<Unit filename="include/Operation.h" />
+		<Unit filename="include/OperationDAO.h" />
+		<Unit filename="include/OperationFactory.h" />
+		<Unit filename="include/OperationHandler.h" />
+		<Unit filename="include/OperationStatus.h" />
+		<Unit filename="include/OperationStatusFactory.h" />
+		<Unit filename="include/ReceivedTransferCommand.h" />
+		<Unit filename="include/ReceivedTransferCommandImpl.h" />
+		<Unit filename="include/ReceivedTransferOnHoldCommand.h" />
+		<Unit filename="include/ReceivedTransferOnHoldCommandImpl.h" />
+		<Unit filename="include/ReceivedTransferOperationFactory.h" />
+		<Unit filename="include/SCTHandler.h" />
+		<Unit filename="include/SepaCommonCommand.h" />
+		<Unit filename="include/SepaHandler.h" />
+		<Unit filename="include/SepaHeader.h" />
+		<Unit filename="include/SepaOperationFactory.h" />
+		<Unit filename="include/SepaProvisionedCommand.h" />
+		<Unit filename="include/SepaProvisionedCommandImpl.h" />
+		<Unit filename="include/SingleThreadedCommand.h" />
+		<Unit filename="include/SingleThreadedCommandFactory.h" />
+		<Unit filename="include/Singleton.h" />
+		<Unit filename="include/Thread.h" />
+		<Unit filename="include/TimerManager.h" />
+		<Unit filename="include/TypeTraits.h" />
+		<Unit filename="include/Utils.h" />
+		<Unit filename="include/XMLParser.h" />
+		<Unit filename="include/constants.h" />
+		<Unit filename="include/enums.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/BaseDAO.cpp" />
+		<Unit filename="src/CassandraOperationFactory.cpp" />
+		<Unit filename="src/CassandraSession.cpp" />
+		<Unit filename="src/CassandraUtils.cpp" />
+		<Unit filename="src/Client.cpp" />
+		<Unit filename="src/ClientDAO.cpp" />
+		<Unit filename="src/CommandImpl.cpp" />
+		<Unit filename="src/CustomFields.cpp" />
+		<Unit filename="src/Decimal.cpp" />
+		<Unit filename="src/Event.cpp" />
+		<Unit filename="src/EventDAO.cpp" />
+		<Unit filename="src/GlobalConfig.cpp" />
+		<Unit filename="src/Logger.cpp" />
+		<Unit filename="src/MultiThreadedCommandFactory.cpp" />
+		<Unit filename="src/OnHoldOperationHandler.cpp" />
+		<Unit filename="src/Operation.cpp" />
+		<Unit filename="src/OperationDAO.cpp" />
+		<Unit filename="src/OperationFactory.cpp" />
+		<Unit filename="src/OperationStatusFactory.cpp" />
+		<Unit filename="src/ProvionedOperationHandler.cpp" />
+		<Unit filename="src/ReceivedTransferCommand.cpp" />
+		<Unit filename="src/ReceivedTransferCommandImpl.cpp" />
+		<Unit filename="src/ReceivedTransferOnHoldCommand.cpp" />
+		<Unit filename="src/ReceivedTransferOnHoldCommandImpl.cpp" />
+		<Unit filename="src/ReceivedTransferOperationFactory.cpp" />
+		<Unit filename="src/SCTHandler.cpp" />
+		<Unit filename="src/SepaHandler.cpp" />
+		<Unit filename="src/SepaOperationFactory.cpp" />
+		<Unit filename="src/SepaProvisionedCommand.cpp" />
+		<Unit filename="src/SepaProvisionedCommandImpl.cpp" />
+		<Unit filename="src/SingleThreadedCommand.cpp" />
+		<Unit filename="src/SingleThreadedCommandFactory.cpp" />
+		<Unit filename="src/Thread.cpp" />
+		<Unit filename="src/TimerManager.cpp" />
+		<Unit filename="src/Utils.cpp" />
+		<Unit filename="src/XMLParser.cpp" />
+		<Unit filename="src/constants.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

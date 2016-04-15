@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   EventDAO.h
  * Author: eric
  *
@@ -14,11 +14,13 @@
 #ifndef EVENTDAO_H
 #define EVENTDAO_H
 #include "BaseDAO.h"
+#include "CassandraUtils.h"
 
 class Event;
 class BalanceEvent;
 class StatusEvent;
-class EventDAO : public BaseDAO
+class EventDAO : public BaseDAO,
+                 public CassandraUtils
 {
 public:
     EventDAO();

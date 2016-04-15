@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
-CND_ARTIFACT_NAME_Debug=cassandraexemple
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/cassandraexemple
+CND_ARTIFACT_NAME_Debug=cassandraclient
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/cassandraclient
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
-CND_PACKAGE_NAME_Debug=cassandraexemple.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/cassandraexemple.tar
+CND_PACKAGE_NAME_Debug=cassandraclient.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/cassandraclient.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
-CND_ARTIFACT_NAME_Release=cassandraexemple
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/cassandraexemple
+CND_ARTIFACT_NAME_Release=cassandraclient
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/cassandraclient
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
-CND_PACKAGE_NAME_Release=cassandraexemple.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/cassandraexemple.tar
+CND_PACKAGE_NAME_Release=cassandraclient.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/cassandraclient.tar
 #
 # include compiler specific variables
 #

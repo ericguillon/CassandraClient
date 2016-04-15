@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   ClientDAO.h
  * Author: eric
  *
@@ -17,17 +17,19 @@
 #include <cassandra.h>
 #include "BaseDAO.h"
 #include "Factory.h"
+#include "CassandraUtils.h"
 
 
 class Client;
 
 class ClientDAO: public BaseDAO,
+                 public CassandraUtils,
                  public Factory<Client>
 {
 public:
     ClientDAO();
     ~ClientDAO();
-    
+
     Client* getClient(const std::string& iban);
 
     void insertClient(Client* client);
@@ -36,7 +38,7 @@ public:
     bool updateClientBalanceErp(Client* client);
 
 protected:
-    
+
 private:
     CassStatement* insertClientStatement;
     CassStatement* selectClientStatement;

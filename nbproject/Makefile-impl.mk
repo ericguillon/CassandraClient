@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=CassandraExemple
+PROJECTNAME=CassandraClient
 
 # Active Configuration
 DEFAULTCONF=Debug

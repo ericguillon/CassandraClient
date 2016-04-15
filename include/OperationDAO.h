@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   OperationDAO.h
  * Author: eric
  *
@@ -14,9 +14,8 @@
 #ifndef OPERATIONDAO_H
 #define OPERATIONDAO_H
 #include <cassandra.h>
-#include <vector>
 #include "BaseDAO.h"
-#include "Factory.h"
+#include "CassandraUtils.h"
 
 class Operation;
 class OperationStatus;
@@ -26,23 +25,30 @@ class OnHoldStatus;
 class ProvisionedStatus;
 class CancelledStatus;
 class AccountedStatus;
+class OperationHandler;
+class OperationFactory;
+class OperationStatusFactory;
 
 class OperationDAO: public BaseDAO,
-                    public Factory<Operation>
+                    public CassandraUtils
 {
 public:
-    OperationDAO();
-    OperationDAO(const OperationDAO& orig);
+    OperationDAO(OperationFactory* factory, OperationStatusFactory* statusFactory);
     ~OperationDAO();
-    
+
     void getRejectedOperations(std::vector<Operation*>& operations);
     void getOperation(const std::string& month, const std::string& iban, std::vector<Operation*>& operations);
     void getOperation(const std::string& month, const std::string& iban, const std::string& transactionId, std::vector<Operation*>& operations);
-    void getOperation(cassandra_exemple::OperationType type, cassandra_exemple::OperationStatus status, std::vector<Operation*>& operations);
+    void getOperation(cassandra_exemple::OperationType type,
+                      cassandra_exemple::OperationStatus status,
+                      std::vector<Operation*>& operations);
+    void getOperation(cassandra_exemple::OperationType type,
+                      cassandra_exemple::OperationStatus status,
+                      OperationHandler* operationHandler);
 
     void insertOperation(Operation* operation);
     void updateOperation(Operation* operation);
-    
+
     bool isOperationInserted(Operation* operation);
 
     void updateOperationStatus(ReservedStatus* status);
@@ -51,16 +57,8 @@ public:
     void updateOperationStatus(ProvisionedStatus* status);
     void updateOperationStatus(AccountedStatus* status);
     void updateOperationStatus(CancelledStatus* status);
-   
-    template <typename T>
-    void initializeOperationStatus(T* operationStatus, const CassRow* row);
-
-    OperationStatus* getOperationStatus(cassandra_exemple::OperationStatus operationStatus) const;
 
 protected:
-    
-private:
-    std::vector<OperationStatus*> operationStatuses;
     CassStatement* insertOperationStatement;
     CassStatement* selectOperationStatement;
     CassStatement* selectOperationTypeStatusStatement;
@@ -68,6 +66,8 @@ private:
     CassStatement* rejectedOperationStatement;
     CassStatement* provisionedOperationStatement;
     CassStatement* accountedOperationStatement;
+    OperationStatusFactory* statusFactory;
+    OperationFactory* factory;
 };
 
 #endif /* OPERATIONDAO_H */

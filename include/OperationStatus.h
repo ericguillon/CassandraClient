@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   OperationStatus.h
  * Author: eric
  *
@@ -13,19 +13,19 @@
 
 #ifndef OPERATIONSTATUS_H
 #define OPERATIONSTATUS_H
-
+#include <string>
 #include "OperationDAO.h"
+#include "OperationStatusFactory.h"
 
 class Operation;
-class OperationDAO;
 
 class OperationStatus
 {
 public:
     virtual ~OperationStatus(){}
     virtual void update(OperationDAO* operationDAO) = 0;
-    virtual void initialize(OperationDAO* operationDAO, const CassRow* row) = 0;
-    
+    virtual void initialize(OperationStatusFactory* factory, const CassRow* row) = 0;
+
     OperationStatus()
     : operation(0)
     {}
@@ -34,12 +34,12 @@ public:
     {
         return operation;
     }
-    
+
     void setOperation(Operation* operation)
     {
         this->operation = operation;
     }
-    
+
     cassandra_exemple::OperationStatus getStatus() const
     {
         return status;
@@ -57,10 +57,10 @@ public:
     {
         operationDAO->updateOperationStatus(static_cast<T*>(this));
     }
-    
-    void initialize(OperationDAO* operationDAO, const CassRow* row)
+
+    void initialize(OperationStatusFactory* factory, const CassRow* row)
     {
-        operationDAO->initializeOperationStatus(static_cast<T*>(this), row);
+        factory->initializeOperationStatus(static_cast<T*>(this), row);
     }
 };
 
@@ -134,6 +134,8 @@ public:
         this->sabRejected = sabRejected;
     }
     friend class OperationDAO;
+    friend class OperationStatusFactory;
+
 private:
     bool sabRejected;
     bool fpeRejected;
@@ -147,7 +149,7 @@ class OnHoldStatus: public BaseOperationStatus<OnHoldStatus>
 public:
     OnHoldStatus()
     {
-        
+
     }
 };
 
