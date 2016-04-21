@@ -251,7 +251,10 @@ int main(int argc, char** argv)
     CassandraSession* cassandraSession = CassandraSession::getInstance();
     cassandraSession->connect(contact_point);
 
-    const char* new_client_iban = "FR76165980000100358960008898";
+
+    const char* new_client_iban = "FR7616598000010083868000102";
+    //sctHandler.createClient(new_client_iban);
+
     ClientDAO clientDAO;
     BOOST_LOG_TRIVIAL(info) << "Getting client " << new_client_iban;
     if (Client* client = clientDAO.getClient(new_client_iban))
@@ -264,7 +267,8 @@ int main(int argc, char** argv)
         client->authorizedCorrespondentIban("FR76165980000100358960009899");
         clientDAO.updateClientCorrespondentWhitelist(client);
 
-        client->updateBalance(75.15);
+        client->setBalance(0.0);
+        client->updateBalance(1009.77);
         clientDAO.updateClientBalance(client);
 
         client->display();

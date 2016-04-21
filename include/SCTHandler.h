@@ -35,12 +35,10 @@ public:
     void processOnHoldOperations();
     void processRejectedOperations();
     void processProvisionedOperations();
-
+    void createClient(const std::string& iban);
     using SepaHandler::processRejectedOperations;
     using SepaHandler::processProvisionedOperations;
-protected:
 
-    void createClient(const std::string& iban);
 protected:
     boost::shared_ptr<CommandFactory> factory;
     ClientDAO clientDAO;

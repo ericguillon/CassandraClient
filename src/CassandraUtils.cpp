@@ -39,7 +39,8 @@ CassError CassandraUtils::cass_value_get(const CassValue* value, boost::posix_ti
 {
     cass_int64_t timestamp;
     cass_value_get_int64(value, &timestamp);
-    date = boost::posix_time::from_time_t(timestamp);
+    boost::posix_time::ptime epochTime(boost::gregorian::date(1970,1,1));
+    date = epochTime + boost::posix_time::milliseconds(timestamp);
 }
 
 CassError CassandraUtils::cass_value_get(const CassValue* value, cassandra_exemple::OperationCanal& canal)

@@ -66,7 +66,23 @@ Decimal::Decimal(double value)
 void Decimal::encode()
 {
     int intValue = (value * 1000) / 10;
-    bytesSize = snprintf((char*)bytes, maxBytesSize - 1, "%d", intValue);
+    bytesSize = 1;
+    int tmp;
+    while ((tmp = (intValue / std::pow(2, bytesSize * 8))))
+    {
+        ++bytesSize;
+        if (bytesSize >= maxBytesSize)
+        {
+            bytesSize = 0;
+            break;
+        }
+    }
+    for (unsigned int i = 0; i < bytesSize; ++i)
+    {
+        int power = static_cast<int>(std::pow(2, (bytesSize - i - 1) * 8));
+        bytes[i] = intValue / power;
+        intValue = intValue % power;
+    }
 }
 
 Decimal::Decimal(const Decimal& orig) {
@@ -84,8 +100,11 @@ Decimal::~Decimal() {
 
 void Decimal::decode()
 {
-    bytes[bytesSize] = '\0';
-    int intValue = atoi(reinterpret_cast<char*>(bytes));
+    int intValue = 0;
+    for (unsigned int i = 0; i < bytesSize; ++i )
+    {
+        intValue += bytes[i] * std::pow(2, (bytesSize - i - 1) * 8);
+    }
     value = (double)intValue / 100;
 }
 

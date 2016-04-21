@@ -24,6 +24,7 @@ MultiThreadedCommandFactory::MultiThreadedCommandFactory()
 
 MultiThreadedCommandFactory::~MultiThreadedCommandFactory()
 {
+    //flush(true);
     Command* command;
     while (freeCommandQueue.pop(command))
     {

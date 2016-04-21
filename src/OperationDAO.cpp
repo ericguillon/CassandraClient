@@ -373,7 +373,13 @@ bool OperationDAO::isOperationInserted(Operation* operation)
                         cass_value_get_string(idValue, operation->id);
                         cass_int64_t timestamp;
                         cass_value_get_int64(insertionDateValue, &timestamp);
-                        operation->setInsertionDate(boost::posix_time::from_time_t(timestamp));
+                        boost::posix_time::ptime epochTime(boost::gregorian::date(1970,1,1));
+                        //operation->setInsertionDate(boost::posix_time::from_time_t(timestamp + boost::posix_time::to_time_t(epochTime)));
+                        operation->setInsertionDate(epochTime + boost::posix_time::milliseconds(timestamp));
+                        BOOST_LOG_TRIVIAL(info) << "Operation " << operation->getTransactionId()
+                                                    << " type " << value
+                                                    << " from client " << operation->getClientCompte().iban
+                                                    << " inserted on " << operation->getInsertionDate();
                         break;
                     }
                 }

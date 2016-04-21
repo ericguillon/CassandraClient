@@ -9,6 +9,7 @@ public:
     : CommandImpl(factory, statusFactory)
     {}
     void processOperation(Operation* operation);
+    void createClient(const std::string& iban);
 };
 
 #endif // RECEIVEDTRANSFERCOMMANDIMPL_H

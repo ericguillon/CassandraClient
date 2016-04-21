@@ -46,6 +46,5 @@ void Thread::operator()()
 
 void Thread::stop()
 {
-    BOOST_LOG_TRIVIAL(info) << "Stopping thread :" << boost::this_thread::get_id();
     started = false;
 }

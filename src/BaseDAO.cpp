@@ -53,7 +53,9 @@ CassError BaseDAO::cass_statement_bind(CassStatement* statement, std::size_t ind
 
 CassError BaseDAO::cass_statement_bind(CassStatement* statement, std::size_t index, const boost::posix_time::ptime& date)
 {
-    return cass_statement_bind_int64(statement, index, boost::posix_time::to_time_t(date));
+    boost::posix_time::ptime epochTime(boost::gregorian::date(1970,1,1));
+    boost::posix_time::time_duration diff = date - epochTime;
+    return cass_statement_bind_int64(statement, index, diff.total_milliseconds());
 }
 
 void BaseDAO::displayError(CassFuture* resultFuture, const std::string& displayMessage)

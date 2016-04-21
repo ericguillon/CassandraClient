@@ -80,6 +80,8 @@ void SCTHandler::createClient(const std::string& iban)
 {
     Client* client = clientDAO.get();
     client->setIban(iban);
+    client->setBalance(0.0);
+    client->setBalanceErp(0.0);
     client->setStatus("compte_ouvert");
     clientDAO.insertClient(client);
     clientDAO.release(client);

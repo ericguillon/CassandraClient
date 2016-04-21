@@ -7,8 +7,8 @@
 void ReceivedTransferCommandImpl::processOperation(Operation* operation)
 {
     const Compte& clientCompte = operation->getClientCompte();
-//    BOOST_LOG_TRIVIAL(info) << "Creating client " << clientCompte.iban << "...";
-//    createClient(clientCompte.iban);
+    BOOST_LOG_TRIVIAL(info) << "Creating client " << clientCompte.iban << "...";
+    createClient(clientCompte.iban);
     BOOST_LOG_TRIVIAL(info) << "Processing operation " << operation->getTransactionId() << "...";
     OperationStatus* oldOperationStatus = operation->getStatus();
     bool operationInserted = isOperationInserted(operation);
@@ -37,4 +37,15 @@ void ReceivedTransferCommandImpl::processOperation(Operation* operation)
     {
         updateOperation(operation);
     }
+}
+
+void ReceivedTransferCommandImpl::createClient(const std::string& iban)
+{
+    Client* client = clientDAO.get();
+    client->setIban(iban);
+    client->setBalance(0.0);
+    client->setBalanceErp(0.0);
+    client->setStatus("compte_ouvert");
+    clientDAO.insertClient(client);
+    clientDAO.release(client);
 }
